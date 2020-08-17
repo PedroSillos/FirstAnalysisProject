@@ -470,25 +470,34 @@
     ],
     "perspectives": [
       {
-        "name": "ReportOnly",
+        "name": "NoViews",
         "tables": [
           {
-            "name": "OrdersView",
+            "name": "Orders",
             "columns": [
               {
-                "name": "Customer"
+                "name": "CustomerId"
               },
               {
                 "name": "OrderDate"
               },
               {
+                "name": "OrderDay"
+              },
+              {
+                "name": "OrderDayPeriod"
+              },
+              {
                 "name": "OrderID"
               },
               {
-                "name": "OrderType"
+                "name": "OrderTypeID"
               },
               {
-                "name": "Product"
+                "name": "OrderTypeName"
+              },
+              {
+                "name": "ProductId"
               },
               {
                 "name": "Quantity"
@@ -496,19 +505,71 @@
               {
                 "name": "TotalPrice"
               }
+            ],
+            "hierarchies": [
+              {
+                "name": "Category"
+              }
             ]
           },
           {
-            "name": "OrderTypesReport",
+            "name": "OrderType",
             "columns": [
               {
-                "name": "CustomersCount"
+                "name": "Detail"
               },
               {
-                "name": "OrdersCount"
+                "name": "Name"
               },
               {
-                "name": "OrderType"
+                "name": "OrderTypeID"
+              }
+            ]
+          },
+          {
+            "name": "Customer",
+            "columns": [
+              {
+                "name": "CustomerID"
+              },
+              {
+                "name": "DDI2"
+              },
+              {
+                "name": "Email"
+              },
+              {
+                "name": "Name"
+              },
+              {
+                "name": "Phone"
+              }
+            ],
+            "measures": [
+              {
+                "name": "CustomerCount"
+              }
+            ]
+          },
+          {
+            "name": "Product",
+            "columns": [
+              {
+                "name": "Name"
+              },
+              {
+                "name": "Price"
+              },
+              {
+                "name": "ProductID"
+              },
+              {
+                "name": "Stock"
+              }
+            ],
+            "measures": [
+              {
+                "name": "TotalStockValue"
               }
             ]
           }
