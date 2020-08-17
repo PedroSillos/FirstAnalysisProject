@@ -255,16 +255,32 @@
         ],
         "partitions": [
           {
-            "name": "Partition",
+            "name": "Partition2016",
             "dataView": "full",
             "source": {
               "type": "m",
               "expression": [
                 "let",
                 "    Source = #\"SQL/PSILLOSX-MOBL2;OfficeSuppliesSampleV2\",",
-                "    dbo_Orders = Source{[Schema=\"dbo\",Item=\"Orders\"]}[Data]",
+                "    dbo_Orders = Source{[Schema=\"dbo\",Item=\"Orders\"]}[Data],",
+                "    #\"Filtered Rows\" = Table.SelectRows(dbo_Orders, each [OrderDate] >= #datetime(2016, 1, 1, 0, 0, 0) and [OrderDate] <= #datetime(2016, 12, 31, 0, 0, 0))",
                 "in",
-                "    dbo_Orders"
+                "    #\"Filtered Rows\""
+              ]
+            }
+          },
+          {
+            "name": "Partition2017",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = #\"SQL/PSILLOSX-MOBL2;OfficeSuppliesSampleV2\",",
+                "    dbo_Orders = Source{[Schema=\"dbo\",Item=\"Orders\"]}[Data],",
+                "    #\"Filtered Rows\" = Table.SelectRows(dbo_Orders, each [OrderDate] >= #datetime(2017, 1, 1, 0, 0, 0) and [OrderDate] <= #datetime(2017, 12, 31, 0, 0, 0))",
+                "in",
+                "    #\"Filtered Rows\""
               ]
             }
           }
@@ -497,6 +513,47 @@
             ]
           }
         ]
+      }
+    ],
+    "roles": [
+      {
+        "name": "Sales Manager",
+        "modelPermission": "read"
+      },
+      {
+        "name": "Sales Analyst",
+        "modelPermission": "read",
+        "tablePermissions": [
+          {
+            "name": "Customer",
+            "metadataPermission": "none"
+          },
+          {
+            "name": "OrderType",
+            "columnPermissions": [
+              {
+                "name": "OrderTypeID",
+                "metadataPermission": "none"
+              },
+              {
+                "name": "Name",
+                "metadataPermission": "none"
+              },
+              {
+                "name": "Detail",
+                "metadataPermission": "none"
+              }
+            ]
+          },
+          {
+            "name": "Product",
+            "metadataPermission": "none"
+          }
+        ]
+      },
+      {
+        "name": "Administrator",
+        "modelPermission": "administrator"
       }
     ],
     "annotations": [
