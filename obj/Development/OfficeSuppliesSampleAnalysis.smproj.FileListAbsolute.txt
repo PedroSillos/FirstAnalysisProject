@@ -1,0 +1,7 @@
+C:\Users\psillosx\OneDrive - Intel Corporation\Desktop\OfficeSuppliesSampleAnalysis\bin\Model.asdatabase
+C:\Users\psillosx\OneDrive - Intel Corporation\Desktop\OfficeSuppliesSampleAnalysis\bin\Model.deploymenttargets
+C:\Users\psillosx\OneDrive - Intel Corporation\Desktop\OfficeSuppliesSampleAnalysis\bin\Model.deploymentoptions
+C:\Users\psillosx\OneDrive - Intel Corporation\Desktop\OfficeSuppliesSampleAnalysis\obj\Development\OfficeSuppliesSampleAnalysis.smproj.CoreCompileInputs.cache
+C:\Users\psillosx\OneDrive - Intel Corporation\Desktop\OfficeSuppliesSampleAnalysis\obj\Development\Model.asdatabase
+C:\Users\psillosx\OneDrive - Intel Corporation\Desktop\OfficeSuppliesSampleAnalysis\obj\Development\Model.deploymentoptions
+C:\Users\psillosx\OneDrive - Intel Corporation\Desktop\OfficeSuppliesSampleAnalysis\obj\Development\Model.deploymenttargets
