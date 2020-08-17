@@ -1,0 +1,446 @@
+{
+  "name": "SemanticModel",
+  "compatibilityLevel": 1500,
+  "model": {
+    "culture": "en-US",
+    "dataSources": [
+      {
+        "type": "structured",
+        "name": "SQL/PSILLOSX-MOBL2;OfficeSuppliesSampleV2",
+        "connectionDetails": {
+          "protocol": "tds",
+          "address": {
+            "server": "PSILLOSX-MOBL2",
+            "database": "OfficeSuppliesSampleV2"
+          },
+          "authentication": null,
+          "query": null
+        },
+        "options": {},
+        "credential": {
+          "AuthenticationKind": "KerberosS4U",
+          "kind": "SQL",
+          "path": "psillosx-mobl2;OfficeSuppliesSampleV2",
+          "EncryptConnection": false,
+          "Username": "AMR\\psillosx"
+        }
+      }
+    ],
+    "tables": [
+      {
+        "name": "OrdersView",
+        "columns": [
+          {
+            "name": "OrderID",
+            "dataType": "int64",
+            "sourceColumn": "OrderID"
+          },
+          {
+            "name": "OrderType",
+            "dataType": "string",
+            "sourceColumn": "OrderType"
+          },
+          {
+            "name": "OrderDate",
+            "dataType": "dateTime",
+            "sourceColumn": "OrderDate"
+          },
+          {
+            "name": "Customer",
+            "dataType": "string",
+            "sourceColumn": "Customer"
+          },
+          {
+            "name": "Product",
+            "dataType": "string",
+            "sourceColumn": "Product"
+          },
+          {
+            "name": "Quantity",
+            "dataType": "int64",
+            "sourceColumn": "Quantity"
+          },
+          {
+            "name": "TotalPrice",
+            "dataType": "double",
+            "sourceColumn": "TotalPrice"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Partition",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = #\"SQL/PSILLOSX-MOBL2;OfficeSuppliesSampleV2\",",
+                "    dbo_OrdersView = Source{[Schema=\"dbo\",Item=\"OrdersView\"]}[Data]",
+                "in",
+                "    dbo_OrdersView"
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "name": "OrderTypesReport",
+        "columns": [
+          {
+            "name": "OrderType",
+            "dataType": "string",
+            "sourceColumn": "OrderType"
+          },
+          {
+            "name": "OrdersCount",
+            "dataType": "int64",
+            "sourceColumn": "OrdersCount"
+          },
+          {
+            "name": "CustomersCount",
+            "dataType": "int64",
+            "sourceColumn": "CustomersCount"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Partition",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = #\"SQL/PSILLOSX-MOBL2;OfficeSuppliesSampleV2\",",
+                "    dbo_OrderTypesReport = Source{[Schema=\"dbo\",Item=\"OrderTypesReport\"]}[Data]",
+                "in",
+                "    dbo_OrderTypesReport"
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "name": "Customer",
+        "columns": [
+          {
+            "name": "CustomerID",
+            "dataType": "int64",
+            "sourceColumn": "CustomerID"
+          },
+          {
+            "name": "Name",
+            "dataType": "string",
+            "sourceColumn": "Name"
+          },
+          {
+            "name": "Email",
+            "dataType": "string",
+            "sourceColumn": "Email"
+          },
+          {
+            "name": "Phone",
+            "dataType": "string",
+            "sourceColumn": "Phone"
+          },
+          {
+            "type": "calculated",
+            "name": "DDI2",
+            "dataType": "string",
+            "isDataTypeInferred": true,
+            "expression": [
+              "",
+              "    LEFT('Customer'[Phone], 3)"
+            ]
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Partition",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = #\"SQL/PSILLOSX-MOBL2;OfficeSuppliesSampleV2\",",
+                "    dbo_Customer = Source{[Schema=\"dbo\",Item=\"Customer\"]}[Data]",
+                "in",
+                "    dbo_Customer"
+              ]
+            }
+          }
+        ],
+        "measures": [
+          {
+            "name": "CustomerCount",
+            "expression": [
+              "",
+              "COUNTROWS(",
+              "    DISTINCT( 'Customer'[Name] ) //ALL() ignores filters, DISTINCT obeys filters",
+              ")"
+            ]
+          }
+        ]
+      },
+      {
+        "name": "Orders",
+        "columns": [
+          {
+            "name": "OrderID",
+            "dataType": "int64",
+            "sourceColumn": "OrderID"
+          },
+          {
+            "name": "OrderTypeID",
+            "dataType": "int64",
+            "sourceColumn": "OrderTypeID"
+          },
+          {
+            "name": "OrderDate",
+            "dataType": "dateTime",
+            "sourceColumn": "OrderDate"
+          },
+          {
+            "name": "CustomerId",
+            "dataType": "int64",
+            "sourceColumn": "CustomerId"
+          },
+          {
+            "name": "ProductId",
+            "dataType": "int64",
+            "sourceColumn": "ProductId"
+          },
+          {
+            "name": "Quantity",
+            "dataType": "int64",
+            "sourceColumn": "Quantity"
+          },
+          {
+            "name": "TotalPrice",
+            "dataType": "double",
+            "sourceColumn": "TotalPrice"
+          },
+          {
+            "type": "calculated",
+            "name": "OrderDay",
+            "dataType": "string",
+            "isDataTypeInferred": true,
+            "expression": [
+              "FORMAT( 'Orders'[OrderDate] ,",
+              " \t\"dddd\"",
+              " )"
+            ]
+          },
+          {
+            "type": "calculated",
+            "name": "OrderDayPeriod",
+            "dataType": "string",
+            "isDataTypeInferred": true,
+            "expression": [
+              " ",
+              "SWITCH( ",
+              "    TRUE(),",
+              "    'Orders'[OrderDate] >= TIMEVALUE( \"06:00\" ) && 'Orders'[OrderDate] < TIMEVALUE( \"14:00\" ), \"Morning\",",
+              "    'Orders'[OrderDate] >= TIMEVALUE( \"14:00\" ) && 'Orders'[OrderDate] < TIMEVALUE( \"22:00\" ), \"Afternoon\",",
+              "    \"Night\"",
+              ")"
+            ]
+          },
+          {
+            "type": "calculated",
+            "name": "OrderTypeName",
+            "dataType": "string",
+            "isDataTypeInferred": true,
+            "expression": "RELATED('OrderType'[Name])"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Partition",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = #\"SQL/PSILLOSX-MOBL2;OfficeSuppliesSampleV2\",",
+                "    dbo_Orders = Source{[Schema=\"dbo\",Item=\"Orders\"]}[Data]",
+                "in",
+                "    dbo_Orders"
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "name": "OrderType",
+        "columns": [
+          {
+            "name": "OrderTypeID",
+            "dataType": "int64",
+            "sourceColumn": "OrderTypeID"
+          },
+          {
+            "name": "Name",
+            "dataType": "string",
+            "sourceColumn": "Name"
+          },
+          {
+            "name": "Detail",
+            "dataType": "string",
+            "sourceColumn": "Detail"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Partition",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = #\"SQL/PSILLOSX-MOBL2;OfficeSuppliesSampleV2\",",
+                "    dbo_OrderType = Source{[Schema=\"dbo\",Item=\"OrderType\"]}[Data]",
+                "in",
+                "    dbo_OrderType"
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "name": "Product",
+        "columns": [
+          {
+            "name": "ProductID",
+            "dataType": "int64",
+            "sourceColumn": "ProductID"
+          },
+          {
+            "name": "Name",
+            "dataType": "string",
+            "sourceColumn": "Name"
+          },
+          {
+            "name": "Stock",
+            "dataType": "int64",
+            "sourceColumn": "Stock"
+          },
+          {
+            "name": "Price",
+            "dataType": "double",
+            "sourceColumn": "Price"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Partition",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = #\"SQL/PSILLOSX-MOBL2;OfficeSuppliesSampleV2\",",
+                "    dbo_Product = Source{[Schema=\"dbo\",Item=\"Product\"]}[Data]",
+                "in",
+                "    dbo_Product"
+              ]
+            }
+          }
+        ],
+        "measures": [
+          {
+            "name": "TotalStockValue",
+            "expression": [
+              "",
+              "SUMX(",
+              "    'Product',",
+              "    'Product'[Stock] * 'Product'[Price]",
+              ")"
+            ],
+            "kpi": {
+              "targetExpression": "5000",
+              "statusGraphic": "Shapes",
+              "statusExpression": [
+                "var x='Product'[TotalStockValue] return",
+                "            if(ISBLANK(x),BLANK(),",
+                "                    If(x<2000,-1,",
+                "\t                If(x<4000,0,1)",
+                "                )",
+                "            )",
+                "            "
+              ],
+              "annotations": [
+                {
+                  "name": "GoalType",
+                  "value": "StaticValue"
+                },
+                {
+                  "name": "KpiStatusType",
+                  "value": "Linear"
+                },
+                {
+                  "name": "KpiThresholdType",
+                  "value": "Absolute"
+                },
+                {
+                  "name": "KpiThresholdOrdering",
+                  "value": "Ascending"
+                },
+                {
+                  "name": "KpiThresholdCount",
+                  "value": "2"
+                },
+                {
+                  "name": "KpiThreshold_0",
+                  "value": "2000"
+                },
+                {
+                  "name": "KpiThreshold_1",
+                  "value": "4000"
+                }
+              ]
+            }
+          }
+        ]
+      }
+    ],
+    "relationships": [
+      {
+        "name": "55c76a8d-f15d-4cc5-81ef-b1c3121311b9",
+        "fromTable": "Orders",
+        "fromColumn": "CustomerId",
+        "toTable": "Customer",
+        "toColumn": "CustomerID"
+      },
+      {
+        "name": "21218b43-e551-44af-9eec-ab529056dbc8",
+        "fromTable": "Orders",
+        "fromColumn": "OrderTypeID",
+        "toTable": "OrderType",
+        "toColumn": "OrderTypeID"
+      },
+      {
+        "name": "1b888439-76e9-4bb4-b04d-791a3dda1283",
+        "fromTable": "Orders",
+        "fromColumn": "ProductId",
+        "toTable": "Product",
+        "toColumn": "ProductID"
+      },
+      {
+        "name": "7dda47b9-f5d1-4349-9ae6-970cd917054b",
+        "toCardinality": "many",
+        "fromTable": "OrdersView",
+        "fromColumn": "OrderDate",
+        "toTable": "Orders",
+        "toColumn": "OrderDate",
+        "crossFilteringBehavior": "bothDirections"
+      }
+    ],
+    "annotations": [
+      {
+        "name": "ClientCompatibilityLevel",
+        "value": "600"
+      }
+    ]
+  },
+  "id": "SemanticModel"
+}
